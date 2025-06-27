@@ -17,15 +17,26 @@ def _decrypt_bytes(input_bytes: bytes) -> str:
     return input_bytes.decode()
 
 
-def encrypt_string_to_bytes(intput_str: str) -> bytes:
+def encrypt_string_to_bytes(input_str: str) -> bytes:
+    """Encode a string as bytes for storage.
+
+    Historically this function accidentally used a misspelled parameter name
+    ``intput_str`` which made the API a little confusing.  The parameter name
+    has been corrected to ``input_str``.  The underlying behaviour is
+    unchanged; the string is passed to the versioned encryption implementation
+    which may simply return the encoded bytes in the MIT edition.
+    """
+
     versioned_encryption_fn = fetch_versioned_implementation(
         "onyx.utils.encryption", "_encrypt_string"
     )
-    return versioned_encryption_fn(intput_str)
+    return versioned_encryption_fn(input_str)
 
 
-def decrypt_bytes_to_string(intput_bytes: bytes) -> str:
+def decrypt_bytes_to_string(input_bytes: bytes) -> str:
+    """Decode bytes previously produced by ``encrypt_string_to_bytes``."""
+
     versioned_decryption_fn = fetch_versioned_implementation(
         "onyx.utils.encryption", "_decrypt_bytes"
     )
-    return versioned_decryption_fn(intput_bytes)
+    return versioned_decryption_fn(input_bytes)
